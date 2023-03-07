@@ -24,7 +24,7 @@ export const action = async ({ params, request }) => {
     return redirect("/");
   }
 
-  return null;
+  return response.data;
 };
 
 export default Signup;

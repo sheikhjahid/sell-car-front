@@ -3,3 +3,7 @@ form {
   background-color: #3a485242;
   padding: 39px;
 }
+
+.error {
+  color: red;
+}

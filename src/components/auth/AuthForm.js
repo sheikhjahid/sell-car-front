@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Form,
   useActionData,
@@ -26,7 +26,7 @@ const AuthForm = ({ signup = true }) => {
 
     if (inputDetails?.email) {
       if (
-        inputDetails.email.test(/^([\w-\.+]+@([\w-]+\.)+[\w-]{2,4})?$/) ===
+        /^([\w-\\.+]+@([\w-]+\.)+[\w-]{2,4})?$/.test(inputDetails.email) ===
         false
       ) {
         errorBag["email"] = "Invalid email address provided.";
@@ -43,7 +43,6 @@ const AuthForm = ({ signup = true }) => {
       errorBag["password"] = "Password is required.";
     }
 
-    console.log(errorBag);
     if (errorBag) {
       setErrors(errorBag);
     }
@@ -65,15 +64,37 @@ const AuthForm = ({ signup = true }) => {
     submit(formDetails, { method: "POST" });
   };
 
+  const setSubmitErrors = async () => {
+    await setErrors({
+      error:
+        typeof formErrorData.message === "string"
+          ? formErrorData.message
+          : "Invalid Credentials",
+    });
+  };
+
+  useEffect(() => {
+    if (formErrorData !== undefined) {
+      setSubmitErrors();
+    }
+    // eslint-disable-next-line
+  }, [formErrorData]);
+
   return (
     <>
       <div className="row">
         <div className="mt-3 mx-auto col-10 col-md-8 col-lg-3 my-3">
           <h3>{signup ? "Register" : "Login"}</h3>
           <Form onSubmit={submitHandler}>
+            {errors?.error && <p className="error">{errors.error}</p>}
             {signup && (
               <div className="mb-3">
-                <label htmlFor="exampleInputEmail1" className="form-label">
+                <label
+                  htmlFor="exampleInputEmail1"
+                  className={`form-label ${
+                    errors && errors?.name ? "error" : null
+                  }`}
+                >
                   Name
                 </label>
                 <input
@@ -82,11 +103,17 @@ const AuthForm = ({ signup = true }) => {
                   name="name"
                   onChange={inputChangeHandler}
                 />
+                {errors?.name && <p className="error">{errors.name}</p>}
               </div>
             )}
 
             <div className="mb-3">
-              <label htmlFor="exampleInputEmail1" className="form-label">
+              <label
+                htmlFor="exampleInputEmail1"
+                className={`form-label ${
+                  errors && errors?.email ? "error" : null
+                }`}
+              >
                 Email address
               </label>
               <input
@@ -95,9 +122,15 @@ const AuthForm = ({ signup = true }) => {
                 name="email"
                 onChange={inputChangeHandler}
               />
+              {errors?.email && <p className="error">{errors.email}</p>}
             </div>
             <div className="mb-3">
-              <label htmlFor="exampleInputPassword1" className="form-label">
+              <label
+                htmlFor="exampleInputPassword1"
+                className={`form-label ${
+                  errors && errors?.password ? "error" : null
+                }`}
+              >
                 Password
               </label>
               <input
@@ -106,6 +139,7 @@ const AuthForm = ({ signup = true }) => {
                 name="password"
                 onChange={inputChangeHandler}
               />
+              {errors?.password && <p className="error">{errors.password}</p>}
             </div>
             <button
               type="submit"
