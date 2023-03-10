@@ -1,49 +1,68 @@
-import { NavLink } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, NavLink, useNavigate } from "react-router-dom";
+import { getAuthUser, signout } from "../../store/slices/authSlice";
+import "./navbar.css";
 
 const Navbar = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const user = useSelector(getAuthUser);
+
+  const logout = async () => {
+    await dispatch(signout());
+    navigate("/signin");
+  };
   return (
     <>
-      <nav className="navbar navbar-expand-lg bg-body-tertiary">
-        <div className="container-fluid">
-          <NavLink className="navbar-brand" to="/">
-            Home
-          </NavLink>
-          <button
-            className="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarNav"
-            aria-controls="navbarNav"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
-            <span className="navbar-toggler-icon"></span>
-          </button>
-          <div className="collapse navbar-collapse" id="navbarNav">
-            <ul className="navbar-nav">
-              <li className="nav-item">
-                <NavLink
-                  className={({ isActive }) =>
-                    isActive ? "nav-link active" : "nav-link"
-                  }
-                  aria-current="page"
-                  to="signin"
-                >
-                  Signin
+      <nav className="navbar navbar-expand-lg navbar-light bg-light">
+        <button
+          className="navbar-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target="#navbarTogglerDemo01"
+          aria-controls="navbarTogglerDemo01"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span className="navbar-toggler-icon"></span>
+        </button>
+        <div className="collapse navbar-collapse" id="navbarTogglerDemo01">
+          <h3>Sell Car</h3>
+          {user && (
+            <>
+              <ul className="navbar-nav ml-4 mr-auto mt-2 mt-lg-0">
+                <NavLink to="/users" className="nav-link">
+                  Users
                 </NavLink>
-              </li>
-              <li className="nav-item">
-                <NavLink
-                  className={({ isActive }) =>
-                    isActive ? "nav-link active" : "nav-link"
-                  }
-                  to="signup"
-                >
-                  Signup
+                <NavLink className="nav-link" to="reports">
+                  Reports
                 </NavLink>
-              </li>
-            </ul>
-          </div>
+              </ul>
+              <div className="nav-item dropdown">
+                <Link
+                  className="nav-link dropdown-toggle"
+                  to="#"
+                  id="navbarDropdownMenuLink"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                >
+                  {user.name}
+                </Link>
+                <div
+                  className="dropdown-menu"
+                  aria-labelledby="navbarDropdownMenuLink"
+                >
+                  <Link className="dropdown-item" to="users/profile">
+                    Profile
+                  </Link>
+                  <Link className="dropdown-item" onClick={logout}>
+                    Logout
+                  </Link>
+                </div>
+              </div>
+            </>
+          )}
         </div>
       </nav>
     </>

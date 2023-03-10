@@ -3,11 +3,12 @@ import backend from "../../axios";
 
 const initialState = {
   token: null,
+  user: null,
 };
 
-export const signup = createAsyncThunk("auth/signup", (payload) => {
+export const signup = createAsyncThunk("auth/signup", async (payload) => {
   try {
-    const response = backend
+    const response = await backend
       .post("auth/signup", payload)
       .then((res) => res)
       .catch((err) => err.response);
@@ -17,10 +18,22 @@ export const signup = createAsyncThunk("auth/signup", (payload) => {
   }
 });
 
-export const signin = createAsyncThunk("auth/signin", (payload) => {
+export const signin = createAsyncThunk("auth/signin", async (payload) => {
   try {
-    const response = backend
+    const response = await backend
       .post("auth/signin", payload)
+      .then((res) => res)
+      .catch((err) => err.response);
+    return response;
+  } catch (error) {
+    return error.message;
+  }
+});
+
+export const signout = createAsyncThunk("auth/signout", async () => {
+  try {
+    const response = await backend
+      .get("auth/signout")
       .then((res) => res)
       .catch((err) => err.response);
     return response;
@@ -34,7 +47,10 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     setToken: (state, action) => {
-      state.token = action.payload.token;
+      state.token = action.payload;
+    },
+    setAuthUser: (state, action) => {
+      state.user = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -42,10 +58,12 @@ const authSlice = createSlice({
       .addCase(signin.fulfilled, (state, action) => {
         if (action.payload.status === 201) {
           state.token = action.payload.data.token;
+          state.user = action.payload.data.user;
           localStorage.setItem(
             "data",
             JSON.stringify({
               token: state.token,
+              user: state.user,
             })
           );
         }
@@ -53,19 +71,29 @@ const authSlice = createSlice({
       .addCase(signup.fulfilled, (state, action) => {
         if (action.payload.status === 201) {
           state.token = action.payload.data.token;
+          state.user = action.payload.data.user;
           localStorage.setItem(
             "data",
             JSON.stringify({
               token: state.token,
+              user: state.user,
             })
           );
+        }
+      })
+      .addCase(signout.fulfilled, (state, action) => {
+        if (action.payload.status === 200) {
+          localStorage.clear();
+          state.token = null;
+          state.user = null;
         }
       });
   },
 });
 
-export const { setToken } = authSlice.actions;
+export const { setToken, setAuthUser } = authSlice.actions;
 
 export const getToken = (state) => state.auth.token;
+export const getAuthUser = (state) => state.auth.user;
 
 export default authSlice.reducer;
