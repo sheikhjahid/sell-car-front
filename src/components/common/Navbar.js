@@ -47,6 +47,23 @@ const Navbar = () => {
                   aria-haspopup="true"
                   aria-expanded="false"
                 >
+                  {user?.picUrl ? (
+                    <img
+                      alt="profile-pic"
+                      src={`http://localhost:3001/${user.picUrl}`}
+                      height="50"
+                      width="50"
+                      style={{ borderRadius: "20px" }}
+                    ></img>
+                  ) : (
+                    <img
+                      alt="profile-pic"
+                      src="no-profile.png"
+                      height="50"
+                      width="50"
+                      style={{ borderRadius: "20px" }}
+                    ></img>
+                  )}{" "}
                   {user.name}
                 </Link>
                 <div

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import {
   Form,
+  NavLink,
   useActionData,
   useNavigation,
   useSubmit,
@@ -84,7 +85,25 @@ const AuthForm = ({ signup = true }) => {
     <>
       <div className="row">
         <div className="mt-3 mx-auto col-10 col-md-8 col-lg-3 my-3">
-          <h3>{signup ? "Register" : "Login"}</h3>
+          <h3>
+            <NavLink
+              className={({ isActive }) =>
+                isActive ? "auth-link active" : "auth-link"
+              }
+              to="/signup"
+            >
+              Register
+            </NavLink>{" "}
+            /{" "}
+            <NavLink
+              className={({ isActive }) =>
+                isActive ? "auth-link active" : "auth-link"
+              }
+              to="/signin"
+            >
+              Login
+            </NavLink>
+          </h3>
           <Form onSubmit={submitHandler}>
             {errors?.error && <p className="error">{errors.error}</p>}
             {signup && (

@@ -22,10 +22,8 @@ export const updateProfile = createAsyncThunk(
   "users/updateProfile",
   async (payload) => {
     try {
-      const { userId } = payload;
-      delete payload.userId;
       const response = await backend
-        .put("profile/" + userId, payload)
+        .put("auth/profile", payload)
         .then((res) => res)
         .catch((err) => err.response);
 
@@ -49,9 +47,7 @@ const usersSlice = createSlice({
       if (action.payload.status === 200) {
         state.users = action.payload.data;
       }
-    }).addCase(updateProfile.fulfilled, (state, action) => {
-        console.log(action.payload);
-    })
+    });
   },
 });
 

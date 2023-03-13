@@ -51,6 +51,15 @@ const authSlice = createSlice({
     },
     setAuthUser: (state, action) => {
       state.user = action.payload;
+      const localStorageData = JSON.parse(localStorage.getItem("data"));
+
+      localStorage.setItem(
+        "data",
+        JSON.stringify({
+          ...localStorageData,
+          user: state.user,
+        })
+      );
     },
   },
   extraReducers: (builder) => {

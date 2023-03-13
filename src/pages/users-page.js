@@ -1,20 +1,24 @@
-import { useSelector } from "react-redux";
 import { json } from "react-router-dom";
 import store from "../store";
-import { getAuthUser } from "../store/slices/authSlice";
 import { fetchUsers } from "../store/slices/usersSlice";
-
+import Users from "../components/users";
 const UsersPage = () => {
-  return <>Users</>;
+  return (
+    <>
+      <div className="container">
+        <h3>Users: List</h3>
+        <Users />
+      </div>
+    </>
+  );
 };
 
 export const loader = async ({ params, request }) => {
-  const response = store.dispatch(fetchUsers());
+  const response = await store.dispatch(fetchUsers());
 
-  // if (!store.auth.user) {
-  //   throw json({ message: "Unable to find profile" }, { status: 404 });
-  // }
-
+  if (response.payload.status !== 200) {
+    throw json({ message: "Unable to load users" }, { status: 500 });
+  }
   return null;
 };
 

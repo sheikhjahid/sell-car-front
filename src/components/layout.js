@@ -8,7 +8,6 @@ const Layout = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     const localStorageData = JSON.parse(localStorage.getItem("data"));
-    console.log(localStorageData.user.name);
     if (localStorageData) {
       if (localStorageData?.token) {
         dispatch(setToken(localStorageData.token));

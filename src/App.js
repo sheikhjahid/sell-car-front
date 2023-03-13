@@ -8,8 +8,11 @@ import { action as SignupAction } from "./pages/Signup";
 import { action as SignInAction } from "./pages/Signin";
 import { loader as AuthLoader } from "./components/common/Auth";
 import Users, { loader as UsersLoader } from "./pages/users-page";
-import Profile, { loader as ProfileLoader } from "./pages/profile-page";
+import ProfilePage, {
+  action as ProfileAction,
+} from "./pages/profile-page";
 import Reports from "./pages/reports-page";
+import "./App.css";
 const App = () => {
   const router = createBrowserRouter([
     {
@@ -25,7 +28,11 @@ const App = () => {
           loader: AuthLoader,
           children: [
             { index: true, element: <Users />, loader: UsersLoader },
-            { path: "profile", element: <Profile />, loader: ProfileLoader },
+            {
+              path: "profile",
+              element: <ProfilePage />,
+              action: ProfileAction,
+            },
           ],
         },
         {
