@@ -2,7 +2,18 @@ import { json } from "react-router-dom";
 import store from "../store";
 import { fetchUsers } from "../store/slices/usersSlice";
 import Users from "../components/users";
+import { useState } from "react";
 const UsersPage = () => {
+
+  const [modal, setModal] = useState({});
+
+  const showModal = (title, message) => {
+    setModal({
+      title,
+      message
+    })
+  }
+
   return (
     <>
       <div className="container">

@@ -1,14 +1,31 @@
+import { useState } from "react";
 import { json } from "react-router-dom";
+import Alert from "../components/common/Alert";
 import Profile from "../components/users/profile";
 import store from "../store";
 import { setAuthUser } from "../store/slices/authSlice";
 import { updateProfile } from "../store/slices/usersSlice";
 
 const ProfilePage = () => {
+  const [alert, setAlert] = useState({});
+
+  const showAlert = (type, message) => {
+    setAlert({
+      type,
+      message,
+    });
+
+    setTimeout(() => {
+      setAlert({});
+    }, 2000);
+  };
+
   return (
     <>
+      {alert && <Alert data={alert} />}
       <div className="container">
-        <Profile />
+        <h3>Users: Profile</h3>
+        <Profile showAlert={showAlert} />
       </div>
     </>
   );
@@ -37,7 +54,7 @@ export const action = async ({ params, request }) => {
     })
   );
 
-  return null;
+  return response;
 };
 
 export default ProfilePage;

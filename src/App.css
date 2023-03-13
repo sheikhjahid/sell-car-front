@@ -4,11 +4,15 @@ div.container {
   margin-top: 25px;
 }
 
+h3 {
+  padding: 20px;
+}
+
 
 form {
   border-radius: 5px;
   background-color: #3a485242;
-  padding: 39px;
+  padding: 20px;
 }
 
 .profile {

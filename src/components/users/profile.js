@@ -8,13 +8,14 @@ import {
 } from "react-router-dom";
 import { getAuthUser } from "../../store/slices/authSlice";
 
-const Profile = () => {
+const Profile = ({ showAlert }) => {
+  const authUser = useSelector(getAuthUser);
+
   const submit = useSubmit();
   const navigation = useNavigation();
-  const authUser = useSelector(getAuthUser);
   const actionData = useActionData();
-  const [formDetails, setFormDetails] = useState({});
 
+  const [formDetails, setFormDetails] = useState({});
   const [errors, setErrors] = useState({});
 
   const validate = (inputDetails) => {
@@ -78,11 +79,15 @@ const Profile = () => {
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [authUser]);
+  }, [authUser, setFormDetails]);
 
   useEffect(() => {
     if (actionData) {
-      setErrors({ ...errors, submitError: actionData.message });
+      if (actionData.status === 200) {
+        showAlert("success", "Profile updated successfully.");
+      } else {
+        setErrors({ ...errors, submitError: actionData.message });
+      }
     }
 
     return () => {
@@ -94,7 +99,6 @@ const Profile = () => {
   return (
     <>
       <Form className="profile" onSubmit={submitFormHandler}>
-        <h3>Users: Profile</h3>
         {errors?.submitError && <p className="error">{errors.submitError}</p>}
         <div className="mb-3 mt-3">
           <label
@@ -108,6 +112,7 @@ const Profile = () => {
             className="form-control"
             name="name"
             value={formDetails.name}
+            defaultValue={formDetails.name}
             onChange={inputChangeHandler}
           />
           {errors?.name && <p className="error">{errors.name}</p>}
@@ -124,7 +129,8 @@ const Profile = () => {
             className="form-control"
             name="email"
             value={formDetails.email}
-            onChange={inputChangeHandler}
+            defaultValue={formDetails.name}
+            disabled
           />
           {errors?.email && <p className="error">{errors.email}</p>}
         </div>
