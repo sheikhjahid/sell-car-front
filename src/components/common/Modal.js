@@ -1,18 +1,28 @@
 import { useEffect, useRef } from "react";
 
-const Modal = ({ show = false, data }) => {
-  const buttonRef = useRef();
+const Modal = ({ show = false, data, confirm, close }) => {
+  const openModalRef = useRef();
+  const closeModalRef = useRef();
+
+  const closeModal = () => {
+    close();
+  };
+
+  const confirmModal = () => {
+    closeModalRef.current.click();
+    confirm();
+  };
 
   useEffect(() => {
     if (show) {
-      buttonRef.current.click();
+      openModalRef.current.click();
     }
   }, [show]);
 
   return (
     <>
       <button
-        ref={buttonRef}
+        ref={openModalRef}
         type="button"
         style={{ display: "none" }}
         className="btn btn-primary"
@@ -25,7 +35,7 @@ const Modal = ({ show = false, data }) => {
       <div
         className="modal fade"
         id="exampleModal"
-        tabindex="-1"
+        tabIndex="-1"
         role="dialog"
         aria-labelledby="exampleModalLabel"
         aria-hidden="true"
@@ -41,20 +51,27 @@ const Modal = ({ show = false, data }) => {
                 className="close"
                 data-dismiss="modal"
                 aria-label="Close"
+                onClick={closeModal}
               >
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
-            <div className="modal-body">{data.content}</div>
+            <div className="modal-body">{data.message}</div>
             <div className="modal-footer">
               <button
+                ref={closeModalRef}
                 type="button"
                 className="btn btn-secondary"
                 data-dismiss="modal"
+                onClick={closeModal}
               >
                 Close
               </button>
-              <button type="button" className="btn btn-primary">
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={confirmModal}
+              >
                 Save changes
               </button>
             </div>

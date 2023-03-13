@@ -34,6 +34,23 @@ export const updateProfile = createAsyncThunk(
   }
 );
 
+export const removeProfile = createAsyncThunk(
+  "users/removeProfile",
+  async (payload) => {
+    try {
+      const response = await backend
+        .delete("auth/remove-profile", {
+          data: payload,
+        })
+        .then((res) => res)
+        .catch((err) => err.response);
+      return response;
+    } catch (error) {
+      return error.message;
+    }
+  }
+);
+
 const usersSlice = createSlice({
   name: "users",
   initialState,
