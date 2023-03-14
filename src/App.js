@@ -12,7 +12,10 @@ import Users, {
   action as UsersAction,
 } from "./pages/users-page";
 import ProfilePage, { action as ProfileAction } from "./pages/profile-page";
-import Reports from "./pages/reports-page";
+import Reports, {
+  loader as ReportsLoader,
+  action as ReportsAction,
+} from "./pages/reports-page";
 import "./App.css";
 const App = () => {
   const router = createBrowserRouter([
@@ -44,7 +47,14 @@ const App = () => {
         {
           path: "reports",
           loader: AuthLoader,
-          children: [{ index: true, element: <Reports /> }],
+          children: [
+            {
+              index: true,
+              element: <Reports />,
+              loader: ReportsLoader,
+              action: ReportsAction,
+            },
+          ],
         },
       ],
     },

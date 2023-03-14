@@ -53,7 +53,7 @@ export const action = async ({ params, request }) => {
 
   await store.dispatch(fetchUsers());
 
-  return response;
+  return json(response);
 };
 
 export default UsersPage;

@@ -8,11 +8,22 @@ const Modal = ({ show = false, data, action, meta, closeModal }) => {
   const closeModalRef = useRef();
 
   const confirm = async () => {
+    closeModalRef.current.click();
+
     if (action === "user-delete") {
-      closeModalRef.current.click();
       await submit({ email: meta.email }, { method: "PUT" });
-      close();
     }
+    if (action === "report-confirm") {
+      await submit({ id: meta.id, type: action }, { method: "PUT" });
+    }
+    if (action === "report-reject") {
+      await submit({ id: meta.id, type: action }, { method: "PUT" });
+    }
+    if (action === "report-delete") {
+      await submit({ id: meta.id, type: action }, { method: "DELETE" });
+    }
+
+    close();
   };
 
   const close = () => {

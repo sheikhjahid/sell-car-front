@@ -62,9 +62,9 @@ const Profile = ({ showAlert }) => {
     setFormDetails({ ...formDetails, file: e.target.files[0] });
   };
 
-  const submitFormHandler = async (e) => {
+  const submitFormHandler = (e) => {
     e.preventDefault();
-    await submit(formDetails, {
+    submit(formDetails, {
       method: "PUT",
       encType: "multipart/form-data",
     });

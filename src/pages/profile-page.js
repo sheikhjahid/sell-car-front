@@ -51,10 +51,11 @@ export const action = async ({ params, request }) => {
       name: response.data.name,
       email: response.data.email,
       picUrl: response.data.picUrl,
+      role: response.data.role.name,
     })
   );
 
-  return response;
+  return json(response);
 };
 
 export default ProfilePage;

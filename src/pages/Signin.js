@@ -1,4 +1,4 @@
-import { redirect } from "react-router-dom";
+import { json, redirect } from "react-router-dom";
 import AuthForm from "../components/auth/AuthForm";
 import store from "../store";
 import { signin } from "../store/slices/authSlice";
@@ -24,7 +24,7 @@ export const action = async ({ params, request }) => {
     return redirect("/");
   }
 
-  return response.data;
+  return json(response.data);
 };
 
 export default Signin;

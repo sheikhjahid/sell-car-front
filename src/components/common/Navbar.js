@@ -31,9 +31,12 @@ const Navbar = () => {
           {user && (
             <>
               <ul className="navbar-nav ml-4 mr-auto mt-2 mt-lg-0">
-                <NavLink to="/users" className="nav-link">
-                  Users
-                </NavLink>
+                {user.role === "admin" && (
+                  <NavLink to="/users" className="nav-link">
+                    Users
+                  </NavLink>
+                )}
+
                 <NavLink className="nav-link" to="reports">
                   Reports
                 </NavLink>
