@@ -7,6 +7,7 @@ const Index = ({ showAlert }) => {
   const actionData = useActionData();
   const users = useSelector(getUsers);
   const [modal, setModal] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const showModal = (title, message, action, meta) => {
     setModal({
       data: {
@@ -18,22 +19,27 @@ const Index = ({ showAlert }) => {
     });
   };
 
-  const closeModal = () => {
+  const closeModal = (submit) => {
     setModal(null);
+    if (submit === true) {
+      setIsLoading(true);
+    }
   };
 
   useEffect(() => {
     if (actionData) {
+      setIsLoading(false);
       if (actionData.status === 200) {
         showAlert("success", "User removed successfully");
       } else {
         showAlert("danger", "Unable to remove user.");
       }
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [actionData]);
   return (
     <>
+      {isLoading && <p id="loading-indicator" />}
       {modal && (
         <Modal
           show={true}

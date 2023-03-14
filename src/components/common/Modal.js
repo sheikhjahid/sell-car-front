@@ -23,11 +23,11 @@ const Modal = ({ show = false, data, action, meta, closeModal }) => {
       await submit({ id: meta.id, type: action }, { method: "DELETE" });
     }
 
-    close();
+    close(true);
   };
 
-  const close = () => {
-    closeModal();
+  const close = (submit = false) => {
+    closeModal(submit);
   };
 
   useEffect(() => {

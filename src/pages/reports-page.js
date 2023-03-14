@@ -102,7 +102,6 @@ export const action = async ({ params, request }) => {
   }
 
   response = { ...response, message };
-  console.log(response);
 
   return json(response);
 };

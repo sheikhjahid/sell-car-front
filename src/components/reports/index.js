@@ -12,6 +12,7 @@ const Index = ({ showAlert }) => {
 
   const [isAdmin, setIsAdmin] = useState(false);
   const [modal, setModal] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const showModal = (title, message, action, meta) => {
     setModal({
@@ -24,8 +25,11 @@ const Index = ({ showAlert }) => {
     });
   };
 
-  const closeModal = () => {
+  const closeModal = (submit) => {
     setModal(null);
+    if (submit === true) {
+      setIsLoading(true);
+    }
   };
 
   useEffect(() => {
@@ -36,6 +40,7 @@ const Index = ({ showAlert }) => {
 
   useEffect(() => {
     if (actionData) {
+      setIsLoading(false);
       if (actionData.status === 200) {
         showAlert("success", actionData.message);
       } else {
@@ -47,6 +52,7 @@ const Index = ({ showAlert }) => {
 
   return (
     <>
+      {isLoading && <p id="loading-indicator" />}
       {modal && (
         <Modal
           show={true}

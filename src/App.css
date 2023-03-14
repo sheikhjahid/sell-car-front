@@ -21,3 +21,53 @@ form {
 .error {
   color: red;
 }
+
+#loading-indicator::after,
+#loading-indicator::before {
+  box-sizing: border-box;
+  left: 50%;
+  position: absolute;
+  top: 50%;
+}
+
+#loading-indicator {
+  background-color: rgba(0, 0, 0, 0.5);
+  bottom: 0;
+  box-sizing: border-box;
+  font-size: 1px;
+  height: 100%;
+  left: 0;
+  margin: 0 !important;
+  padding: 0 !important;
+  position: fixed;
+  right: 0;
+  top: 0;
+  width: 100%;
+  z-index: 2147483646;
+}
+#loading-indicator::before {
+  background: url(../public/loader.gif) center center no-repeat
+    rgba(0, 0, 0, 0);
+  content: "";
+  height: 100px;
+  margin-left: -50px;
+  margin-top: -70px;
+  width: 100px;
+  z-index: 2;
+}
+#loading-indicator::after {
+  background: #fff;
+  border-radius: 5px;
+  color: #000;
+  content: attr(data-content);
+  font-family: arial;
+  font-size: 17px;
+  height: 110px;
+  line-height: 98px;
+  margin-left: -150px;
+  margin-top: -75px;
+  padding-top: 35px;
+  text-align: center;
+  width: 300px;
+  z-index: 1;
+}

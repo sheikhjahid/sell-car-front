@@ -17,23 +17,13 @@ const Profile = ({ showAlert }) => {
 
   const [formDetails, setFormDetails] = useState({});
   const [errors, setErrors] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
 
   const validate = (inputDetails) => {
     let errorBag = {};
 
     if (!inputDetails?.name) {
       errorBag["name"] = "Name is required.";
-    }
-
-    if (inputDetails?.email) {
-      if (
-        /^([\w-\\.+]+@([\w-]+\.)+[\w-]{2,4})?$/.test(inputDetails.email) ===
-        false
-      ) {
-        errorBag["email"] = "Invalid email address provided.";
-      }
-    } else {
-      errorBag["email"] = "Email is required.";
     }
 
     if (inputDetails?.password) {
@@ -64,6 +54,7 @@ const Profile = ({ showAlert }) => {
 
   const submitFormHandler = (e) => {
     e.preventDefault();
+    setIsLoading(true);
     submit(formDetails, {
       method: "PUT",
       encType: "multipart/form-data",
@@ -83,6 +74,7 @@ const Profile = ({ showAlert }) => {
 
   useEffect(() => {
     if (actionData) {
+      setIsLoading(false);
       if (actionData.status === 200) {
         showAlert("success", "Profile updated successfully.");
       } else {
@@ -98,6 +90,7 @@ const Profile = ({ showAlert }) => {
 
   return (
     <>
+      {isLoading && <p id="loading-indicator" />}
       <Form className="profile" onSubmit={submitFormHandler}>
         {errors?.submitError && <p className="error">{errors.submitError}</p>}
         <div className="mb-3 mt-3">
