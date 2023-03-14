@@ -22,13 +22,28 @@ export const updateProfile = createAsyncThunk(
   "users/updateProfile",
   async (payload) => {
     try {
-      const { userId } = payload;
-      delete payload.userId;
       const response = await backend
-        .put("profile/" + userId, payload)
+        .put("auth/profile", payload)
         .then((res) => res)
         .catch((err) => err.response);
 
+      return response;
+    } catch (error) {
+      return error.message;
+    }
+  }
+);
+
+export const removeProfile = createAsyncThunk(
+  "users/removeProfile",
+  async (payload) => {
+    try {
+      const response = await backend
+        .delete("auth/remove-profile", {
+          data: payload,
+        })
+        .then((res) => res)
+        .catch((err) => err.response);
       return response;
     } catch (error) {
       return error.message;
@@ -49,9 +64,7 @@ const usersSlice = createSlice({
       if (action.payload.status === 200) {
         state.users = action.payload.data;
       }
-    }).addCase(updateProfile.fulfilled, (state, action) => {
-        console.log(action.payload);
-    })
+    });
   },
 });
 

@@ -7,9 +7,16 @@ import Signup from "./pages/Signup";
 import { action as SignupAction } from "./pages/Signup";
 import { action as SignInAction } from "./pages/Signin";
 import { loader as AuthLoader } from "./components/common/Auth";
-import Users, { loader as UsersLoader } from "./pages/users-page";
-import Profile, { loader as ProfileLoader } from "./pages/profile-page";
-import Reports from "./pages/reports-page";
+import Users, {
+  loader as UsersLoader,
+  action as UsersAction,
+} from "./pages/users-page";
+import ProfilePage, { action as ProfileAction } from "./pages/profile-page";
+import Reports, {
+  loader as ReportsLoader,
+  action as ReportsAction,
+} from "./pages/reports-page";
+import "./App.css";
 const App = () => {
   const router = createBrowserRouter([
     {
@@ -24,14 +31,30 @@ const App = () => {
           path: "users",
           loader: AuthLoader,
           children: [
-            { index: true, element: <Users />, loader: UsersLoader },
-            { path: "profile", element: <Profile />, loader: ProfileLoader },
+            {
+              index: true,
+              element: <Users />,
+              loader: UsersLoader,
+              action: UsersAction,
+            },
+            {
+              path: "profile",
+              element: <ProfilePage />,
+              action: ProfileAction,
+            },
           ],
         },
         {
           path: "reports",
           loader: AuthLoader,
-          children: [{ index: true, element: <Reports /> }],
+          children: [
+            {
+              index: true,
+              element: <Reports />,
+              loader: ReportsLoader,
+              action: ReportsAction,
+            },
+          ],
         },
       ],
     },

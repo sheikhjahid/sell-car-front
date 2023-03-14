@@ -31,9 +31,12 @@ const Navbar = () => {
           {user && (
             <>
               <ul className="navbar-nav ml-4 mr-auto mt-2 mt-lg-0">
-                <NavLink to="/users" className="nav-link">
-                  Users
-                </NavLink>
+                {user.role === "admin" && (
+                  <NavLink to="/users" className="nav-link">
+                    Users
+                  </NavLink>
+                )}
+
                 <NavLink className="nav-link" to="reports">
                   Reports
                 </NavLink>
@@ -47,6 +50,23 @@ const Navbar = () => {
                   aria-haspopup="true"
                   aria-expanded="false"
                 >
+                  {user?.picUrl ? (
+                    <img
+                      alt="profile-pic"
+                      src={`http://localhost:3001/${user.picUrl}`}
+                      height="50"
+                      width="50"
+                      style={{ borderRadius: "20px" }}
+                    ></img>
+                  ) : (
+                    <img
+                      alt="profile-pic"
+                      src="no-profile.png"
+                      height="50"
+                      width="50"
+                      style={{ borderRadius: "20px" }}
+                    ></img>
+                  )}{" "}
                   {user.name}
                 </Link>
                 <div
