@@ -3,38 +3,14 @@ import store from "../store";
 import { fetchUsers, removeProfile } from "../store/slices/usersSlice";
 import Users from "../components/users";
 import { useState } from "react";
-import Modal from "../components/common/Modal";
-import { useDispatch } from "react-redux";
 import Alert from "../components/common/Alert";
 const UsersPage = () => {
-  const dispatch = useDispatch();
-  const [selectedUser, setSelectedUser] = useState(null);
   const [alert, setAlert] = useState(null);
-  const [modal, setModal] = useState(null);
 
-  const showModal = (title, message, user) => {
-    setSelectedUser(user);
-    setModal({
-      title,
-      message,
-    });
-  };
-
-  const closeModal = () => {
-    setSelectedUser(null);
-    setModal(null);
-  };
-
-  const confirm = async () => {
-    await dispatch(removeProfile({ email: selectedUser.email })).unwrap();
-
-    closeModal();
-
-    await dispatch(fetchUsers());
-
+  const showAlert = (type, message) => {
     setAlert({
-      type: "success",
-      message: "User removed successfully",
+      type,
+      message,
     });
 
     setTimeout(() => {
@@ -44,13 +20,10 @@ const UsersPage = () => {
 
   return (
     <>
-      {modal && (
-        <Modal show={true} data={modal} confirm={confirm} close={closeModal} />
-      )}
       {alert && <Alert data={alert} />}
       <div className="container">
         <h3>Users: List</h3>
-        <Users showModal={showModal} />
+        <Users showAlert={showAlert} />
       </div>
     </>
   );
@@ -63,6 +36,24 @@ export const loader = async ({ params, request }) => {
     throw json({ message: "Unable to load users" }, { status: 500 });
   }
   return null;
+};
+
+export const action = async ({ params, request }) => {
+  const requestData = await request.formData();
+
+  const payload = {
+    email: requestData.get("email"),
+  };
+
+  const response = await store.dispatch(removeProfile(payload)).unwrap();
+
+  if (response.status !== 200) {
+    return json(response.data);
+  }
+
+  await store.dispatch(fetchUsers());
+
+  return response;
 };
 
 export default UsersPage;

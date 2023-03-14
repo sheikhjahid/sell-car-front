@@ -1,12 +1,48 @@
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { useActionData } from "react-router-dom";
 import { getUsers } from "../../store/slices/usersSlice";
-const Index = ({ showModal }) => {
+import Modal from "../common/Modal";
+const Index = ({ showAlert }) => {
+  const actionData = useActionData();
   const users = useSelector(getUsers);
-  const show = (title, message, user) => {
-    showModal(title, message, user);
+  const [modal, setModal] = useState(null);
+  const showModal = (title, message, action, meta) => {
+    setModal({
+      data: {
+        title,
+        message,
+      },
+      action,
+      meta,
+    });
   };
+
+  const closeModal = () => {
+    setModal(null);
+  };
+
+  useEffect(() => {
+    if (actionData) {
+      if (actionData.status === 200) {
+        showAlert("success", "User removed successfully");
+      } else {
+        showAlert("danger", "Unable to remove user.");
+      }
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [actionData]);
   return (
     <>
+      {modal && (
+        <Modal
+          show={true}
+          data={modal.data}
+          action={modal.action}
+          meta={modal.meta}
+          closeModal={closeModal}
+        />
+      )}
       {users && (
         <>
           <table className="table">
@@ -27,9 +63,10 @@ const Index = ({ showModal }) => {
                       <button
                         className="btn btn-danger"
                         onClick={() =>
-                          show(
-                            "Delete User",
-                            "Are you sure you want to delete this user ?",
+                          showModal(
+                            "User Delete",
+                            "Are you sure you want to delete this user",
+                            "user-delete",
                             user
                           )
                         }

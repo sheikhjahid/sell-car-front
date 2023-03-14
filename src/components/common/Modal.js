@@ -1,22 +1,29 @@
 import { useEffect, useRef } from "react";
+import { useSubmit } from "react-router-dom";
 
-const Modal = ({ show = false, data, confirm, close }) => {
+const Modal = ({ show = false, data, action, meta, closeModal }) => {
+  const submit = useSubmit();
+
   const openModalRef = useRef();
   const closeModalRef = useRef();
 
-  const closeModal = () => {
-    close();
+  const confirm = async () => {
+    if (action === "user-delete") {
+      closeModalRef.current.click();
+      await submit({ email: meta.email }, { method: "PUT" });
+      close();
+    }
   };
 
-  const confirmModal = () => {
-    closeModalRef.current.click();
-    confirm();
+  const close = () => {
+    closeModal();
   };
 
   useEffect(() => {
     if (show) {
       openModalRef.current.click();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [show]);
 
   return (
@@ -39,6 +46,7 @@ const Modal = ({ show = false, data, confirm, close }) => {
         role="dialog"
         aria-labelledby="exampleModalLabel"
         aria-hidden="true"
+        onClick={close}
       >
         <div className="modal-dialog" role="document">
           <div className="modal-content">
@@ -51,7 +59,7 @@ const Modal = ({ show = false, data, confirm, close }) => {
                 className="close"
                 data-dismiss="modal"
                 aria-label="Close"
-                onClick={closeModal}
+                onClick={close}
               >
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -63,14 +71,14 @@ const Modal = ({ show = false, data, confirm, close }) => {
                 type="button"
                 className="btn btn-secondary"
                 data-dismiss="modal"
-                onClick={closeModal}
+                onClick={close}
               >
                 Close
               </button>
               <button
                 type="button"
                 className="btn btn-primary"
-                onClick={confirmModal}
+                onClick={confirm}
               >
                 Save changes
               </button>

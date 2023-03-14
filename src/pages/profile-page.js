@@ -7,7 +7,7 @@ import { setAuthUser } from "../store/slices/authSlice";
 import { updateProfile } from "../store/slices/usersSlice";
 
 const ProfilePage = () => {
-  const [alert, setAlert] = useState({});
+  const [alert, setAlert] = useState(null);
 
   const showAlert = (type, message) => {
     setAlert({
@@ -16,7 +16,7 @@ const ProfilePage = () => {
     });
 
     setTimeout(() => {
-      setAlert({});
+      setAlert(null);
     }, 2000);
   };
 
